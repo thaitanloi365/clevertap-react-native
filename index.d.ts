@@ -1,7 +1,15 @@
+import { Subscription } from "@react-native-community/netinfo";
+
 /*******************
  * Personalization
  ******************/
-
+export type EventNames =
+  | "CleverTapProfileDidInitialize"
+  | "CleverTapProfileSync"
+  | "CleverTapInAppNotificationDismissed"
+  | "CleverTapInboxDidInitialize"
+  | "CleverTapInboxMessagesDidUpdate"
+  | "CleverTapDidTokenRefresh";
 /**
  * Personalization
  * Enables the Personalization API
@@ -368,5 +376,7 @@ export function showInbox(styleConfig: any): void;
  * @param level {number}
  */
 export function setDebugLevel(level: number): void;
+
+export function addListener(eventName: EventNames, handler: void): void;
 
 type Callback = (err: object, res: object) => void;
