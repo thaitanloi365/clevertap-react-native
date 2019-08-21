@@ -27,6 +27,7 @@ RCT_EXPORT_MODULE();
              kCleverTapInAppNotificationDismissed: kCleverTapInAppNotificationDismissed,
              kCleverTapInboxDidInitialize: kCleverTapInboxDidInitialize,
              kCleverTapInboxMessagesDidUpdate: kCleverTapInboxMessagesDidUpdate,
+             kCleverTapDidTokenRefresh: kCleverTapDidTokenRefresh
              };
 }
 
