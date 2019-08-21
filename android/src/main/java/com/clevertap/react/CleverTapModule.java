@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.clevertap.android.sdk.CTInboxListener;
 import com.clevertap.android.sdk.CTInboxStyleConfig;
+import com.clevertap.android.sdk.PushType;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -118,6 +119,22 @@ public class CleverTapModule extends ReactContextBaseJavaModule implements SyncL
     public void registerForPush() {
         // no-op in Android
         Log.i(TAG, "CleverTap.registerForPush is a no-op in Android");
+    }
+
+    @ReactMethod
+    public String getPushToken(String type) {
+        CleverTapAPI clevertap = getCleverTapAPI();
+        String token = null;
+        if (clevertap == null || type == null) token = null;
+
+        if (FCM.equals(type)) {
+            token = clevertap.getDevicePushToken(PushType.FCM);
+        } else if (GCM.equals(type)) {
+            token = clevertap.getDevicePushToken(PushType.GCM);
+        } else {
+            Log.e(TAG, "Unknown push token type "+ type);
+        }
+        return token;
     }
 
     @ReactMethod
