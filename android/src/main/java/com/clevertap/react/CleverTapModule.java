@@ -56,6 +56,8 @@ public class CleverTapModule extends ReactContextBaseJavaModule implements SyncL
     private static final String CLEVERTAP_INBOX_DID_INITIALIZE = "CleverTapInboxDidInitialize";
     private static final String CLEVERTAP_INBOX_MESSAGES_DID_UPDATE = "CleverTapInboxMessagesDidUpdate";
 
+    private static final String CLEVERTAP_DID_TOKEN_REGRESH = "CleverTapDidTokenRefresh";
+
     public static void setInitialUri(final Uri uri) {
         mlaunchURI = uri;
     }
@@ -113,12 +115,32 @@ public class CleverTapModule extends ReactContextBaseJavaModule implements SyncL
         callbackWithErrorAndResult(callback, error, url);
     }
 
+
+
     // push
 
     @ReactMethod
     public void registerForPush() {
         // no-op in Android
         Log.i(TAG, "CleverTap.registerForPush is a no-op in Android");
+        WritableMap params = Arguments.createMap();
+        String token = this.getPushToken("FCM");
+        params.putString("token", token);
+        sendEvent(CLEVERTAP_DID_TOKEN_REGRESH,params);
+    }
+
+    @ReactMethod
+    public void setPushTokenAsString(String token, String type) {
+        CleverTapAPI clevertap = getCleverTapAPI();
+        if (clevertap == null || token == null || type == null) return;
+
+        if (FCM.equals(type)) {
+            clevertap.pushFcmRegistrationId(token, true);
+        } else if (GCM.equals(type)) {
+            clevertap.pushGcmRegistrationId(token, true);
+        } else {
+            Log.e(TAG, "Unknown push token type "+ type);
+        }
     }
 
     @ReactMethod
@@ -135,20 +157,6 @@ public class CleverTapModule extends ReactContextBaseJavaModule implements SyncL
             Log.e(TAG, "Unknown push token type "+ type);
         }
         return token;
-    }
-
-    @ReactMethod
-    public void setPushTokenAsString(String token, String type) {
-        CleverTapAPI clevertap = getCleverTapAPI();
-        if (clevertap == null || token == null || type == null) return;
-
-        if (FCM.equals(type)) {
-            clevertap.pushFcmRegistrationId(token, true);
-        } else if (GCM.equals(type)) {
-            clevertap.pushGcmRegistrationId(token, true);
-        } else {
-            Log.e(TAG, "Unknown push token type "+ type);
-        }
     }
 
     //notification channel/group methods for Android O

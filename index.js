@@ -43,7 +43,7 @@ var CleverTap = {
   GCM: CleverTapReact.GCM,
   CleverTapInboxDidInitialize: CleverTapReact.CleverTapInboxDidInitialize,
   CleverTapInboxMessagesDidUpdate: CleverTapReact.CleverTapInboxMessagesDidUpdate,
-
+  CleverTapDidTokenRefresh: CleverTapReact.CleverTapDidTokenRefresh,
   /**
    * Add a CleverTap event listener
    * supported events are CleverTap.CleverTapProfileDidInitialize, CleverTap.CleverTapProfileSync and CleverTap.CleverTapInAppNotificationDismissed
@@ -61,7 +61,7 @@ var CleverTap = {
    */
   removeListeners: function() {
     if (EventEmitter) {
-      EventEmitter.removeListeners();
+      EventEmitter.removeAllListeners();
     }
   },
 
